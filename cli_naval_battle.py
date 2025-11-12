@@ -9,7 +9,7 @@ grid = [
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ]
-
+# grille
 
 def show_board(grid):
     size = len(grid)
