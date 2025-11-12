@@ -1,4 +1,4 @@
-# Python | Naval Battle Cli Version - ISFATES Algorithmie Groupe Sandy - Théo BELTZUNG - Assem HSSINI
+# Python | Naval Battle Cli Version - ISFATES Algorithmie Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
 # File_name = "cli_naval_battle.py" (version 1.0)
 
 import random
@@ -22,7 +22,7 @@ def show_board(grid):
         print(f"{letters[i]}   " + " | ".join(str(cell) for cell in row))
         # Ligne de séparation (pas après la dernière)
         if i < size - 1:
-            print("    " + "---+" * (size - 1) + "---")
+            print("   " + "---+" * (size - 1) + "---")
 
 show_board(grid)
 
@@ -30,7 +30,7 @@ show_board(grid)
 
 def cli_naval_btl(grid):
 
-    print("\n\nWelcom in Naval Battle !!!\n")
+    print("\n\nWelcome in Naval Battle !!!\n")
 
     p_min = 0
     p_max = len(grid)-1
@@ -63,8 +63,8 @@ def cli_naval_btl(grid):
     print(f"Boat list = {boat_list}")
 
     loop = str(input("Voulez-vous recommencer ? (oui/non) : "))
-    if loop == "oui": print(cli_naval_btl()) 
-    
+    if loop == "oui":   print(cli_naval_btl(grid)) 
+    print("Merci d'avoir jouer et à bientôt ! :)")
     return grid
 
 print(cli_naval_btl(grid))
