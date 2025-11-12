@@ -9,7 +9,6 @@ grid = [
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ]
-    
 
 
 def show_board(grid):
@@ -31,7 +30,7 @@ show_board(grid)
 
 def cli_naval_btl(grid):
 
-    print("\n\nWelcom in Naval Battle !\n")
+    print("\n\nWelcom in Naval Battle !!!\n")
 
     p_min = 0
     p_max = len(grid)-1
@@ -48,7 +47,7 @@ def cli_naval_btl(grid):
     
     print(f"Board :\n{grid}\n")
 
-    print(f"Enter coordinate (x,y) betwen {p_min} and {p_max} !")
+    print(f"Enter coordinate (x,y) between {p_min} and {p_max} !")
     u_x, u_y = int(input('x = ')), int(input('y = '))
     pos = (u_x,u_y)
 
