@@ -68,6 +68,6 @@ def cli_naval_btl(grid):
     
     return grid
 
-print(cli_naval_btl())
+print(cli_naval_btl(grid))
 
 
