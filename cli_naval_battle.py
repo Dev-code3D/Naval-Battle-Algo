@@ -2,6 +2,17 @@
 # File_name = "cli_naval_battle.py" (version 1.0)
 
 import random
+import time
+import sys
+
+def tir_en_cours():
+    #Animation CLI pour simuler un tir en cours.
+    anim = ["💥", "🔫", "🎯", "💣"]
+    for symb in anim:
+        sys.stdout.write(f"\rTir en cours... {symb}")
+        sys.stdout.flush()
+        time.sleep(0.3)
+    print("\rTir effectué !      ")
 
 # (n=4) grid_exemple = [ [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0] ]
 
@@ -60,6 +71,8 @@ def cli_naval_btl(grid, boat_list):
             print("Please enter a valid number.")
             continue
 
+        tir_en_cours()
+        
         pos = (u_x, u_y)
 
         if pos in boat_list:
