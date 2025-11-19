@@ -1,27 +1,28 @@
-# Python | Naval Battle Cli Version - ISFATES Algorithmie Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.1.5)
+# Python | Naval Battle CLI Version - ISFATES Algorithmie
+# Auteur : Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
+# File_name = "cli_naval_battle.py" (version 1.2.2)
 
 import random
 import time
 import sys
 
 def tir_en_cours():
-    #Animation CLI pour simuler un tir en cours.
-    anim = ["💥", "🔫", "🎯", "💣"]
+    """Animation CLI pour simuler un tir en cours."""
+    anim = ["💥", "🔫", "🎯", "💣", "🔥", "⚡", "💢", "🎇", "🎆"]
     for symb in anim:
-        sys.stdout.write(f"\rTir en cours... {symb}")
+        sys.stdout.write(f"\rTir en cours... {symb}   ")
         sys.stdout.flush()
-        time.sleep(0.3)
-    print("\rTir effectué !      ")
+        time.sleep(0.1)
+    print("\rTir effectué !       ")  # Efface le reste de la ligne avec \r
+
 
 def plate(n):
-    """fonction qui genere une matrice carré de dim=n"""
+    """Fonction qui génère une matrice carrée de dim=n"""
     return [[0 for _ in range(n)] for _ in range(n)]
 
 
 def show_board(grid):
-    """fonction pour afficher visuellement le plateau de jeux pour le joueur
-       Lettres en colonnes, chiffres pour les lignes"""
+    """Affiche le plateau comme un échiquier : lettres en colonnes, chiffres en lignes"""
     size = len(grid)
     letters = [chr(ord('A') + i) for i in range(size)]
     
@@ -35,16 +36,15 @@ def show_board(grid):
         print("  +" + "---+" * size)
 
 
-
 def gen_boat(t, grid):
     """Génère t bateaux (1 case chacun) sans doublon"""
     size = len(grid)
     boat_list = []
 
     while len(boat_list) < t:
-        x = random.randint(0, size - 1)
-        y = random.randint(0, size - 1)
-        pos = (x, y)
+        row = random.randint(0, size - 1)
+        col = random.randint(0, size - 1)
+        pos = (row, col)
         if pos not in boat_list:
             boat_list.append(pos)
 
@@ -54,8 +54,8 @@ def gen_boat(t, grid):
 def parse_coord(coord, size):
     """Convertit une entrée type 'A1', 'b2' en indices (row, col)"""
     try:
-        row = ord(coord[0].upper()) - ord('A')
-        col = int(coord[1:]) - 1
+        col = ord(coord[0].upper()) - ord('A')  # Lettre → colonne
+        row = int(coord[1:]) - 1               # Chiffre → ligne
         if not (0 <= row < size and 0 <= col < size):
             raise ValueError
         return row, col
@@ -63,27 +63,31 @@ def parse_coord(coord, size):
         return None
 
 
-def cli_naval_btl(grid, boat_list):
+def cli_naval_btl(grid, boat_list, tours=10):
     print("\n\nWelcome to Naval Battle !!!\n")
 
     size = len(grid)
-    tours = 6
-
+    newtours=tours
     while tours > 0:
         show_board(grid)
         print(f"\nRemaining rounds : {tours}")
-        print(f"Enter coordinates like A1, b2...")
+        print("Enter coordinates like A1, b2...")
 
         coord = input("Coordinate : ")
         parsed = parse_coord(coord, size)
         if parsed is None:
-            print("Invalid format! Example: a2, C3...")
+            print("Invalid format! Example: A1, C3...")
+            continue
+
+        row, col = parsed
+
+        if grid[row][col] in ["X", "Z"]:
+            print("You already tried this cell !")
             continue
 
         tir_en_cours()
-        
-        pos = (u_x, u_y)
 
+        pos = (row, col)
         if pos in boat_list:
             print("\nYou find a boat !")
             grid[row][col] = "X"
@@ -105,7 +109,7 @@ def cli_naval_btl(grid, boat_list):
     if loop.lower() in ["oui", "yes", "y", "o"]:
         new_grid = plate(size)
         new_boats = gen_boat(4, new_grid)
-        cli_naval_btl(new_grid, new_boats)
+        cli_naval_btl(new_grid, new_boats, newtours)
 
     print("Thank you for playing ! See you soon :)")
 
@@ -114,5 +118,5 @@ def cli_naval_btl(grid, boat_list):
 n = 4
 grid = plate(n)
 boat_list = gen_boat(4, grid)
-
-cli_naval_btl(grid, boat_list)
+tours = 10
+cli_naval_btl(grid, boat_list, tours)
