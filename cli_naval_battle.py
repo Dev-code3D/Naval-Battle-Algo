@@ -3,15 +3,18 @@
 
 import random
 
-grid = [
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
-    ]
-# grille
+# grid_exemple = [ [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0] ]
+
+def plate(n):
+    """fonction qui genere une matrice carré de dim=n"""
+    grid = []
+    grid = [[0 for _ in range(n)] for _ in range(n)]
+    return grid
+n = 4
+# plate(n)
 
 def show_board(grid):
+    """fonction pour afficher visuellement le plateau de jeux pour le joueur"""
     size = len(grid)
     letters = [chr(ord('A') + i) for i in range(size)]
     # Affichage de l'entete et des colonnes
@@ -24,18 +27,22 @@ def show_board(grid):
         if i < size - 1:
             print("   " + "---+" * (size - 1) + "---")
 
-show_board(grid)
+show_board(plate(n))
 
+def gen_boat(n):
+    """fonction qui genere une liste de n bateau"""
+    boat_list = [[] for _ in range(n)]
+    return boat_list
+n = 4
+gen_boat(n)
 
-
-def cli_naval_btl(grid):
+def cli_naval_btl(grid, boat_list):
+    """programme principal"""
 
     print("\n\nWelcome in Naval Battle !!!\n")
 
     p_min = 0
     p_max = len(grid)-1
-
-    boat_list = [[],[],[],[]]
 
     n = 0
     while n < 4:
@@ -55,7 +62,7 @@ def cli_naval_btl(grid):
     
     print(f"\np = {grid}\nboat_pos = {boat_pos}\npos = {pos}")
     
-    if boat_pos == pos:
+    if boat_pos in pos:
         print("\nYou find a boat !")
     else:
         print("\nrestart")
@@ -63,10 +70,10 @@ def cli_naval_btl(grid):
     print(f"Boat list = {boat_list}")
 
     loop = str(input("Voulez-vous recommencer ? (oui/non) : "))
-    if loop == "oui":   print(cli_naval_btl(grid)) 
+    if loop == "oui":   print(cli_naval_btl(grid, boat_list)) 
     print("Merci d'avoir jouer et à bientôt ! :)")
     return grid
 
-print(cli_naval_btl(grid))
+print(cli_naval_btl(grid, boat_list))
 
 
