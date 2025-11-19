@@ -3,15 +3,12 @@
 
 import random
 
-# grid_exemple = [ [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0] ]
+# (n=4) grid_exemple = [ [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0] ]
 
 def plate(n):
     """fonction qui genere une matrice carré de dim=n"""
-    grid = []
-    grid = [[0 for _ in range(n)] for _ in range(n)]
-    return grid
-n = 4
-# plate(n)
+    return [[0 for _ in range(n)] for _ in range(n)]
+
 
 def show_board(grid):
     """fonction pour afficher visuellement le plateau de jeux pour le joueur"""
@@ -27,53 +24,70 @@ def show_board(grid):
         if i < size - 1:
             print("   " + "---+" * (size - 1) + "---")
 
-show_board(plate(n))
 
-def gen_boat(n):
-    """fonction qui genere une liste de n bateau"""
-    boat_list = [[] for _ in range(n)]
+def gen_boat(t, grid):
+    """Génère t bateaux (1 case chacun) sans doublon"""
+    size = len(grid)
+    boat_list = []
+
+    while len(boat_list) < t:
+        x = random.randint(0, size - 1)
+        y = random.randint(0, size - 1)
+        pos = (x, y)
+
+        if pos not in boat_list:   # éviter les doublons
+            boat_list.append(pos)
+
     return boat_list
-n = 4
-gen_boat(n)
 
 def cli_naval_btl(grid, boat_list):
-    """programme principal"""
+    print("\n\nWelcome to Naval Battle !!!\n")
 
-    print("\n\nWelcome in Naval Battle !!!\n")
+    size = len(grid)
+    tours = 6
 
-    p_min = 0
-    p_max = len(grid)-1
+    while tours > 0:
+        show_board(grid)
+        print(f"\nRemaining rounds : {tours}")
+        print(f"Enter coordinates between 0 and {size-1}.")
+        try:
+            u_x = int(input("x = "))
+            u_y = int(input("y = "))
+            if not (0 <= u_x < size and 0 <= u_y < size):
+                print("Invalid coordinates !")
+                continue
+        except ValueError:
+            print("Please enter a valid number.")
+            continue
 
-    n = 0
-    while n < 4:
-        x,y = random.randint(p_min, p_max), random.randint(p_min, p_max)
-        boat_pos = (x,y)
-        boat_list[n].append(boat_pos)
-        sol = grid[x][y] = "X"
-        n += 1
-    
-    print(f"Board :\n{grid}\n")
+        pos = (u_x, u_y)
 
-    print(f"Enter coordinate (x,y) between {p_min} and {p_max} !")
-    u_x, u_y = int(input('x = ')), int(input('y = '))
-    pos = (u_x,u_y)
+        if pos in boat_list:
+            print("\nYou find a boat !")
+            grid[u_x][u_y] = "X"
+            boat_list.remove(pos)
 
-    user = grid[u_x][u_y] = "i"
-    
-    print(f"\np = {grid}\nboat_pos = {boat_pos}\npos = {pos}")
-    
-    if boat_pos in pos:
-        print("\nYou find a boat !")
-    else:
-        print("\nrestart")
+            if len(boat_list) == 0:
+                print("\nAll the boats have been sunk !")
+                break
+        else:
+            print("\nRaté…")
+            grid[u_x][u_y] = "Z"
 
-    print(f"Boat list = {boat_list}")
+        tours -= 1
 
-    loop = str(input("Voulez-vous recommencer ? (oui/non) : "))
-    if loop == "oui":   print(cli_naval_btl(grid, boat_list)) 
-    print("Merci d'avoir jouer et à bientôt ! :)")
-    return grid
+    if tours == 0 and len(boat_list) > 0:
+        print(f"\nGame Over ! There were {len(boat_list)} boats left.")
 
-print(cli_naval_btl(grid, boat_list))
+    loop = input("\nDo you want to start again? (yes/no) : ")
+    if loop.lower() == "oui":
+        return cli_naval_btl(plate(len(grid)), gen_boat(len(boat_list), grid))
 
+    print("Thank you for playing ! See you soon :)")
 
+# Programme principal
+n = 4
+grid = plate(n)
+boat_list = gen_boat(4, grid)
+
+cli_naval_btl(grid, boat_list)
