@@ -9,17 +9,20 @@ def plate(n):
 
 
 def show_board(grid):
-    """fonction pour afficher visuellement le plateau de jeux pour le joueur"""
+    """fonction pour afficher visuellement le plateau de jeux pour le joueur
+       Lettres en colonnes, chiffres pour les lignes"""
     size = len(grid)
     letters = [chr(ord('A') + i) for i in range(size)]
     
-    # Affichage de l'entête avec chiffres
-    print("    " + "   ".join(str(i + 1) for i in range(size)))
+    # Affichage de l'entête avec lettres (colonnes)
+    print("    " + "   ".join(letters))
     print("  +" + "---+" * size)
     
+    # Affichage des lignes avec chiffres à gauche
     for i, row in enumerate(grid):
-        print(f"{letters[i]} | " + " | ".join(str(cell) for cell in row) + " |")
+        print(f"{i+1} | " + " | ".join(str(cell) for cell in row) + " |")
         print("  +" + "---+" * size)
+
 
 
 def gen_boat(t, grid):
