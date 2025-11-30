@@ -57,8 +57,8 @@ def parse_coord(coord, size):  # Gestion de l'entrée des coordonnées
     Pour interagir avec la grille.
     """
     try:
-        # Conversion de la lettre (1er) en indice de colonne
-        # Exemple : 'A' → 0, 'B' → 1, ..., 'Z' → 25
+        # Conversion de la lettre (1er) en indice de colonne (Ex : A=0,..Z=25)
+        # ~> Str TO Unicode DE 'B' : ord('B') - ord('A') = 66 - 65 = 1
         col = ord(coord[0].upper()) - ord('A')
 
         # Conversion de la partie numérique (2eme) en indice de ligne
