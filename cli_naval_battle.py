@@ -1,19 +1,19 @@
-# Python | Naval Battle CLI Version - ISFATES Algorithmie
-# Auteur : Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.2.2)
+# Python | Naval Battle CLI Version - ISFATES Algorithmique L1
+# Auteurs : Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
+# File_name = "cli_naval_battle.py" (version 1.3.0)
 
-import random
-import time
-import sys
+import random # -> pour générer des nombres aléatoires
+import time # pour gèrer le temps de l'animation (emoji)
+import sys # pour gèrer l'affichage des animation (emoji)
 
 def tir_en_cours():
-    """Animation CLI pour simuler un tir en cours."""
+    """Animation pour simuler un tir en cours."""
     anim = ["💥", "🔫", "🎯", "💣", "🔥", "⚡", "💢", "🎇", "🎆"]
     for symb in anim:
-        sys.stdout.write(f"\rTir en cours... {symb}   ")
+        sys.stdout.write(f"\rShooting in progress... {symb}   ")
         sys.stdout.flush()
-        time.sleep(0.1)
-    print("\rTir effectué !       ")  # Efface le reste de la ligne avec \r
+        time.sleep(0.05)
+    print("\rShooting completed !       ")  # Efface le reste de la ligne avec \r
 
 
 def plate(n):
@@ -22,7 +22,7 @@ def plate(n):
 
 
 def show_board(grid):
-    """Affiche le plateau comme un échiquier : lettres en colonnes, chiffres en lignes"""
+    """Affiche le plateau comme un échiquier (style des échects) : lettres en colonnes, chiffres en lignes"""
     size = len(grid)
     letters = [chr(ord('A') + i) for i in range(size)]
     
@@ -37,7 +37,7 @@ def show_board(grid):
 
 
 def gen_boat(t, grid):
-    """Génère t bateaux (1 case chacun) sans doublon"""
+    """Génère un nombre t de bateaux (1 case chacun) sans doublon"""
     size = len(grid)
     boat_list = []
 
@@ -45,33 +45,48 @@ def gen_boat(t, grid):
         row = random.randint(0, size - 1)
         col = random.randint(0, size - 1)
         pos = (row, col)
-        if pos not in boat_list:
+        if pos not in boat_list: # Sans doublon
             boat_list.append(pos)
 
     return boat_list
 
 
-def parse_coord(coord, size):
-    """Convertit une entrée type 'A1', 'b2' en indices (row, col)"""
+def parse_coord(coord, size):  # Gestion de l'entrée des coordonnées
+    """
+    Convertit une entrée type 'A1', 'b2' en indices lignes/colonnes (row, col)
+    Pour interagir avec la grille.
+    """
     try:
-        col = ord(coord[0].upper()) - ord('A')  # Lettre → colonne
-        row = int(coord[1:]) - 1               # Chiffre → ligne
+        # Conversion de la lettre (1er) en indice de colonne
+        # Exemple : 'A' → 0, 'B' → 1, ..., 'Z' → 25
+        col = ord(coord[0].upper()) - ord('A')
+
+        # Conversion de la partie numérique (2eme) en indice de ligne
+        # Exemple : '1' → 0, '2' → 1
+        row = int(coord[1:]) - 1
+
+        # Vérifie que les indices sont dans les limites de la grille
         if not (0 <= row < size and 0 <= col < size):
-            raise ValueError
-        return row, col
+            raise ValueError  # Provoque l'entrée dans le except si hors limites
+
+        return row, col  # Retourne un tuple (ligne, colonne)
+
     except (ValueError, IndexError):
+        # En cas d'entrée invalide : coordonnée impossible, lettre incorrecte,
+        # chiffre manquant, hors de la grille, etc.
         return None
 
 
-def cli_naval_btl(grid, boat_list, tours=10):
+
+def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue
     print("\n\nWelcome to Naval Battle !!!\n")
 
     size = len(grid)
-    newtours=tours
+    newtours=tours # Pour gèrer le fait de re-jouer plusieurs fois sans quitter le prgm
     while tours > 0:
-        show_board(grid)
-        print(f"\nRemaining rounds : {tours}")
-        print("Enter coordinates like A1, b2...")
+        show_board(grid) # Affiche la grille
+        print(f"\nRemaining rounds : {tours}") # Tours restants
+        print("Enter coordinates (eq A1, b2)...")
 
         coord = input("Coordinate : ")
         parsed = parse_coord(coord, size)
@@ -85,7 +100,7 @@ def cli_naval_btl(grid, boat_list, tours=10):
             print("You already tried this cell !")
             continue
 
-        tir_en_cours()
+        tir_en_cours() # Animation
 
         pos = (row, col)
         if pos in boat_list:
@@ -114,8 +129,8 @@ def cli_naval_btl(grid, boat_list, tours=10):
     print("Thank you for playing ! See you soon :)")
 
 
-# Programme principal
-n = 4
+# Programme principal + lancement
+n = 4 # n => est la valeur de la taille de la grille/ du plateau à générer (dim = n * n = n²)
 grid = plate(n)
 boat_list = gen_boat(4, grid)
 tours = 10
