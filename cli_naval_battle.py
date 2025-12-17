@@ -12,13 +12,13 @@ def tir_en_cours():
     for symb in anim:
         sys.stdout.write(f"\rShooting in progress... {symb}   ")
         sys.stdout.flush()
-        time.sleep(0.05)
-    print("\rShooting completed !       ")  # Efface le reste de la ligne avec \r
+        time.sleep(0.5)
+    print("\rShooting completed !")  # Efface le reste de la ligne avec \r
 
 
 def plate(n):
     """Fonction qui génère une matrice carrée de dim=n**2"""
-    return [[0 for _ in range(n)] for _ in range(n)]
+    return [[0 for i in range(n)] for i in range(n)]
 
 
 def show_board(grid):
@@ -83,6 +83,8 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
     size = len(grid)
     newtours=tours # Pour gèrer le fait de re-jouer plusieurs fois sans quitter le prgm
     cnt_boat = len(boat_list)
+    icon_boat = "🛥️"
+    icon_missed = "🌊"
     while tours > 0:
         show_board(grid) # Affiche la grille
         print(f"\nRemaining rounds : {tours}") # Tours restants
@@ -97,16 +99,16 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
 
         row, col = parsed
 
-        if grid[row][col] in ["X", "Z"]:
+        if grid[row][col] in [icon_boat, icon_missed]:
             print("You already tried this cell !")
             continue
 
         tir_en_cours() # Animation 
-
+        time.sleep(2)
         pos = (row, col)
         if pos in boat_list:
             print("\nYou find a boat !")
-            grid[row][col] = "X"
+            grid[row][col] = icon_boat
             boat_list.remove(pos)
 
             if len(boat_list) == 0:
@@ -114,8 +116,8 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
                 break
         else:
             print("\nMissed…")
-            grid[row][col] = "Z"
-
+            grid[row][col] = icon_missed
+            time.sleep(2)
         tours -= 1
 
     if tours == 0 and len(boat_list) > 0:
