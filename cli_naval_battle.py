@@ -15,6 +15,17 @@ def tir_en_cours():
         time.sleep(0.5)
     print("\rShooting completed !")  # Efface le reste de la ligne avec \r
 
+def progress_bar():
+    """Affiche une barre de progression simple"""
+    total = 10  # longueur de la barre
+    for i in range(total + 1):
+        bar = "#" * i + "." * (total - i)
+        sys.stdout.write(f"\rProgress: [{bar}]")
+        sys.stdout.flush()
+        time.sleep(0.2)
+    print()  # retour à la ligne à la fin
+
+
 
 def plate(n):
     """Fonction qui génère une matrice carrée de dim=n**2"""
@@ -104,6 +115,7 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
             continue
 
         tir_en_cours() # Animation 
+        progress_bar() #barre de progression
         time.sleep(2)
         pos = (row, col)
         if pos in boat_list:
