@@ -1,6 +1,6 @@
 # Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
 # Auteurs : Groupe Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.5.0)
+# File_name = "cli_naval_battle.py" (version 1.5.1)
 
 import random # -> pour générer des nombres aléatoires
 import time # / pour gèrer le temps de l'animation (emoji)
@@ -110,10 +110,9 @@ def progress_bar(total_tours, tours):
     print()
 
 def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principal
-    print(f"\n\nWelcome to Naval Battle !!!")
-    print("By Grp1 : Sandy Maurelle - Théo BELTZUNG - Assem HSSINI")
+    print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
     print(f"v.{version}\n")
-
+    start=time.time()
     size = len(grid)
     newtours=tours # Pour gèrer le fait de re-jouer plusieurs fois sans quitter le prgm
     cnt_boat = len(boat_list)
@@ -167,12 +166,17 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
         new_grid = plate(size)
         new_boats = gen_boat(4, new_grid)
         cli_naval_btl(new_grid, new_boats, newtours)
-
+    end = time.time()
+    print(chronogame(start, end))
     print("Thank you for playing ! See you soon :)")
+    print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
+    print(f"v.{version}\n")
 
 
-# Programme principal +> lancement
-# cli_naval_btl(grid, boat_list, tours)
+def chronogame(start, end):
+    return(f"Time = {end - start:.3f}s")
+
+# Programme principal & lancement
 def run_prgm(version, n, nbr_boat, tours):
     grid = plate(n)
     boat_list = gen_boat(nbr_boat, grid)
@@ -180,10 +184,12 @@ def run_prgm(version, n, nbr_boat, tours):
     show_menu()
     countdown()
     cli_naval_btl(grid, boat_list, tours)
-    return(".")
+    return("___")
     
-version = "1.5.0"
-n = 4
-nbr_boat = 4
-tours = total_tours = 10
+version = "1.5.1"
+n = 4 #4
+nbr_boat = 4 #4
+tours = total_tours = 10 #10
+
 run_prgm(version, n, nbr_boat, tours)
+
