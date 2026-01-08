@@ -1,43 +1,39 @@
-# Python | Naval Battle CLI Version - ISFATES Algorithmique L1
-# Auteurs : Groupe Sandy Maurelle - Théo BELTZUNG - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.3.2)
+# Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
+# Auteurs : Groupe Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI
+# File_name = "cli_naval_battle.py" (version 1.5.0)
 
 import random # -> pour générer des nombres aléatoires
 import time # / pour gèrer le temps de l'animation (emoji)
-import sys # / pour gèrer l'affichage des animation (emoji)
+import sys # / pour gèrer l'affichage-suppr des animation (emoji)
 
 def tir_en_cours():
     """Animation pour simuler un tir en cours."""
-    anim = ["💥", "🔫", "🎯", "💣", "🔥", "⚡", "💢", "🎇", "🎆"]
+    anim = ["💥", "🔫", "🎯", "💣", "🔥", "⚡", "💢", "🎇", "🎆", ""]
     for symb in anim:
         sys.stdout.write(f"\rShooting in progress... {symb}   ")
         sys.stdout.flush()
-        time.sleep(0.5)
+        time.sleep(0.2)
     print("\rShooting completed !")  # Efface le reste de la ligne avec \r
 
-def progress_bar():
-    """Affiche une barre de progression simple"""
-    total = 10  # longueur de la barre
-    for i in range(total + 1):
-        bar = "#" * i + "." * (total - i)
-        sys.stdout.write(f"\rProgress: [{bar}]")
-        sys.stdout.flush()
-        time.sleep(0.2)
-    print()  # retour à la ligne à la fin
+
+def plate(n):
+    """Fonction qui génère une matrice carrée de dim=n**2"""
+    return [[0 for i in range(n)] for i in range(n)]
 
 def show_menu():
-    #Affiche le menu du jeu
+    """Affiche le menu du jeu de manière visuelle"""
     print("🚢🚢🚢 WELCOME TO NAVAL BATTLE 🚢🚢🚢\n")
     print("🎯 Rules:")
     print("• Enter coordinates like A1, B2...")
     print("• Find and sink all the boats")
     print("• You have a limited number of rounds\n")
-    
+    var=0
     ready = input("Are you ready to play? (yes/no): ").lower()
     while ready not in ["yes", "y", "oui", "o"]:
+        var+=1
+        if var >= 3: print("No problem, see you soon !", sys.exit())
         print("Take your time! Press yes when you are ready.")
         ready = input("Ready? (yes/no): ").lower()
-    
     print("\n Great! Let's start! \n")
 
 
@@ -47,12 +43,6 @@ def countdown():
         print(i)
         time.sleep(1)
     print("GO! 🚀")
-
-
-
-def plate(n):
-    """Fonction qui génère une matrice carrée de dim=n**2"""
-    return [[0 for i in range(n)] for i in range(n)]
 
 
 def show_board(grid):
@@ -105,30 +95,44 @@ def parse_coord(coord, size):  # Gestion de l'entrée des coordonnées par l'uti
         return row, col  # Retourne un tuple (ligne, colonne)
 
     except (ValueError, IndexError):
-        # En cas d'entrée invalide : coordonnée impossible ou lettre incorrecte,
-        # chiffre manquant, hors de la grille, etc.
+        # En cas d'entrée invalide : coordonnée impossible ou lettre incorrecte, chiffre manquant, hors de la grille, etc.
         return None
 
 
+def progress_bar(total_tours, tours):
+    """Affiche une barre de progression vis-a-vis de a la progression du jeux fait par le joueur par rapport au nombre de tours max possibles"""
+    # longueur de la barre vaut le max de "tours" soit la valeur par défaut
+    i = total_tours - tours # (eq: i -> 1 = 10 - 9 )
+    bar = "#" * i + "." * (tours)
+    sys.stdout.write(f"\rProgress: [{bar}] - {tours}")
+    sys.stdout.flush()
+    time.sleep(0.4)
+    print()
 
 def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principal
-    print("\n\nWelcome to Naval Battle !!!\n")
+    print(f"\n\nWelcome to Naval Battle !!!")
+    print("By Grp1 : Sandy Maurelle - Théo BELTZUNG - Assem HSSINI")
+    print(f"v.{version}\n")
 
     size = len(grid)
     newtours=tours # Pour gèrer le fait de re-jouer plusieurs fois sans quitter le prgm
     cnt_boat = len(boat_list)
     icon_boat = "🛥️"
-    icon_missed = "🌊"
+    icon_missed  = "🕸️" #🌊⚙️
+    print("Enter coordinates (eq A1, b2)... [stop with: STOPall]\n")
+
     while tours > 0:
         show_board(grid) # Affiche la grille
-        print(f"\nRemaining rounds : {tours}") # Tours restants
         print(f"Boats : {len(boat_list)}/{cnt_boat}")
-        print("Enter coordinates (eq A1, b2)...")
+
+        progress_bar(total_tours,tours) # barre de progression + tours restants
 
         coord = input("Coordinate : ")
         parsed = parse_coord(coord, size)
+        if coord == "STOPall": sys.exit()
         if parsed is None:
-            print("Invalid format! Example: A1, C3...")
+            print("Invalid format! Example: A1, C3...\n")
+            time.sleep(2.4)
             continue
 
         row, col = parsed
@@ -138,11 +142,11 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
             continue
 
         tir_en_cours() # Animation 
-        progress_bar() #barre de progression
-        time.sleep(2)
+        
+        time.sleep(1)
         pos = (row, col)
         if pos in boat_list:
-            print("\nYou find a boat !")
+            print("\nYou find a boat !\n")
             grid[row][col] = icon_boat
             boat_list.remove(pos)
 
@@ -150,9 +154,9 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
                 print("\nAll the boats have been sunk !")
                 break
         else:
-            print("\nMissed…")
+            print("\nMissed…\n")
             grid[row][col] = icon_missed
-            time.sleep(2)
+            time.sleep(1.2)
         tours -= 1
 
     if tours == 0 and len(boat_list) > 0:
@@ -168,11 +172,18 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
 
 
 # Programme principal +> lancement
-n = 4 # n => est la valeur de la taille de la grille/ du plateau à générer (dim = n * n = n²)
-grid = plate(n)
+# cli_naval_btl(grid, boat_list, tours)
+def run_prgm(version, n, nbr_boat, tours):
+    grid = plate(n)
+    boat_list = gen_boat(nbr_boat, grid)
+    tours = total_tours
+    show_menu()
+    countdown()
+    cli_naval_btl(grid, boat_list, tours)
+    return(".")
+    
+version = "1.5.0"
+n = 4
 nbr_boat = 4
-boat_list = gen_boat(nbr_boat, grid)
-tours = 10
-show_menu()
-countdown()
-cli_naval_btl(grid, boat_list, tours)
+tours = total_tours = 10
+run_prgm(version, n, nbr_boat, tours)
