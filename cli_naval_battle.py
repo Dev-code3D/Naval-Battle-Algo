@@ -84,8 +84,7 @@ def parse_coord(coord, size):  # Gestion de l'entrée des coordonnées par l'uti
         # Le calcul ~> Str VERS Unicode Pour trouver l'indice de colonne
         col = ord(coord[0].upper()) - ord('A') # EXEMPLE -> B = ord('B') - ord('A') = 66 - 65 = 1
 
-        # Conversion de la partie numérique (2eme) en indice de ligne
-        # Exemple : '1' -> 0, '2' -> 1
+        # Conversion de la partie numérique (2eme) en indice de ligne ; exemple : '1' -> 0, '2' -> 1
         row = int(coord[1:]) - 1
 
         # Vérifie que les indices sont dans les limites de la grille
