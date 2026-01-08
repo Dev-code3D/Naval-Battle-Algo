@@ -25,12 +25,29 @@ def progress_bar():
         time.sleep(0.2)
     print()  # retour à la ligne à la fin
 
+def show_menu():
+    #Affiche le menu du jeu
+    print("🚢🚢🚢 WELCOME TO NAVAL BATTLE 🚢🚢🚢\n")
+    print("🎯 Rules:")
+    print("• Enter coordinates like A1, B2...")
+    print("• Find and sink all the boats")
+    print("• You have a limited number of rounds\n")
+    
+    ready = input("Are you ready to play? (yes/no): ").lower()
+    while ready not in ["yes", "y", "oui", "o"]:
+        print("Take your time! Press yes when you are ready.")
+        ready = input("Ready? (yes/no): ").lower()
+    
+    print("\n Great! Let's start! \n")
+
+
 def countdown():
     """Animation d'un compte à rebours de 3 à 1"""
     for i in range(3, 0, -1):
         print(i)
         time.sleep(1)
     print("GO! 🚀")
+
 
 
 def plate(n):
@@ -156,5 +173,6 @@ grid = plate(n)
 nbr_boat = 4
 boat_list = gen_boat(nbr_boat, grid)
 tours = 10
+show_menu()
 countdown()
 cli_naval_btl(grid, boat_list, tours)
