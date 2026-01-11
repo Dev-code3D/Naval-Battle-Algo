@@ -1,10 +1,54 @@
 # Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
 # Auteurs : Groupe Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.5.1)
+# File_name = "cli_naval_battle.py" (version 1.5.3)
 
 import random # -> pour générer des nombres aléatoires
 import time # / pour gèrer le temps de l'animation (emoji)
 import sys # / pour gèrer l'affichage-suppr des animation (emoji)
+
+version = "1.5.4"
+
+def set_difficulty(n, nbr_boat, tours):
+    """Allows the user to set the game difficulty."""
+    print("Choose the difficulty level:")
+    print("1-Easy 🙃 \n2-Medium 🛳️ \n3-Hard ☠️☠")
+    while True:
+        try:
+            choice = int(input("Enter your choice (1/2/3): "))
+            if choice == 1:
+                return 4, 4, 10  # (grid size, boats, tours - Easy)
+            elif choice == 2:
+                return 6, 4, 8
+            elif choice == 3:
+                return 8, 6, 14
+            else:
+                print("Please enter a valid option.")
+        except ValueError:
+            print("Invalid input! Please enter a number between 1 and 3.")
+
+
+def show_menu():
+    """Affiche le menu du jeu de manière visuelle"""
+    print("\n🚢🚢🚢 WELCOME TO NAVAL BATTLE 🚢🚢🚢\n")
+    print("🎯 Rules:")
+    print("• Enter coordinates like A1, B2...")
+    print("• Find and sink all the boats")
+    print("• You have a limited number of rounds\n")
+    var = 0
+    while True:
+        ready = input("Are you ready to play? (yes/no): ").lower()
+        if ready in ["yes", "y", "oui", "o"]: print("\nGreat! Let's start! \n") ; break
+        var+=1
+        if var >= 3:
+            print("No problem, see you soon!\n") ; sys.exit()
+        print("Take your time! Press yes when you are ready.")
+
+def countdown():
+    """Animation d'un compte à rebours de 3 à 1"""
+    for i in range(3, 0, -1):
+        print(i)
+        time.sleep(1)
+    print("GO! 🚀")
 
 def tir_en_cours():
     """Animation pour simuler un tir en cours."""
@@ -19,30 +63,6 @@ def tir_en_cours():
 def plate(n):
     """Fonction qui génère une matrice carrée de dim=n**2"""
     return [[0 for i in range(n)] for i in range(n)]
-
-def show_menu():
-    """Affiche le menu du jeu de manière visuelle"""
-    print("🚢🚢🚢 WELCOME TO NAVAL BATTLE 🚢🚢🚢\n")
-    print("🎯 Rules:")
-    print("• Enter coordinates like A1, B2...")
-    print("• Find and sink all the boats")
-    print("• You have a limited number of rounds\n")
-    var=0
-    ready = input("Are you ready to play? (yes/no): ").lower()
-    while ready not in ["yes", "y", "oui", "o"]:
-        var+=1
-        if var >= 3: print("No problem, see you soon !", sys.exit())
-        print("Take your time! Press yes when you are ready.")
-        ready = input("Ready? (yes/no): ").lower()
-    print("\n Great! Let's start! \n")
-
-
-def countdown():
-    """Animation d'un compte à rebours de 3 à 1"""
-    for i in range(3, 0, -1):
-        print(i)
-        time.sleep(1)
-    print("GO! 🚀")
 
 
 def show_board(grid):
@@ -108,16 +128,21 @@ def progress_bar(total_tours, tours):
     time.sleep(0.4)
     print()
 
-def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principal
+def chronogame(start, end):
+    return(f"Time = {end - start:.3f}s")
+
+
+def cli_naval_btl(grid, boat_list, tours, total_tours): # Programe principal
+    """Boucle / programme principal du jeu"""
     print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
     print(f"v.{version}\n")
+
     start=time.time()
     size = len(grid)
-    newtours=tours # Pour gèrer le fait de re-jouer plusieurs fois sans quitter le prgm
     cnt_boat = len(boat_list)
     icon_boat = "🛥️"
     icon_missed  = "🕸️" #🌊⚙️
-    print("Enter coordinates (eq A1, b2)... [stop with: STOPall]\n")
+    print("\nEnter coordinates (eq A1, b2)... [stop with: STOPall]\n")
 
     while tours > 0:
         show_board(grid) # Affiche la grille
@@ -127,7 +152,7 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
 
         coord = input("Coordinate : ")
         parsed = parse_coord(coord, size)
-        if coord == "STOPall": sys.exit()
+        if coord == "STOPall": print("\nSee you soon!\n") ; sys.exit()
         if parsed is None:
             print("Invalid format! Example: A1, C3...\n")
             time.sleep(2.4)
@@ -162,33 +187,29 @@ def cli_naval_btl(grid, boat_list, tours=10): # Programe de bienvenue / principa
 
     loop = input("\nDo you want to start again? (yes/oui/no) : ")
     if loop.lower() in ["oui", "yes", "y", "o"]:
-        new_grid = plate(size)
-        new_boats = gen_boat(4, new_grid)
-        cli_naval_btl(new_grid, new_boats, newtours)
-    end = time.time()
-    print(chronogame(start, end))
-    print("Thank you for playing ! See you soon :)")
-    print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
-    print(f"v.{version}\n")
+        run_prgm()
+    else :
+        end = time.time()
+        print(chronogame(start, end))
+        print("Thank you for playing ! See you soon :)")
+        print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
+        print(f"v.{version}\n")
 
 
-def chronogame(start, end):
-    return(f"Time = {end - start:.3f}s")
-
-# Programme principal & lancement
-def run_prgm(version, n, nbr_boat, tours):
+# Programme de lancement
+def run_prgm():
+    """Function to manage and launch the program - game"""
+    show_menu()
+    n, nbr_boat, tours = 4, 4, 10 # Default values
+    n, nbr_boat, tours = set_difficulty(n, nbr_boat, tours)
+    total_tours = tours
     grid = plate(n)
     boat_list = gen_boat(nbr_boat, grid)
-    tours = total_tours
-    show_menu()
     countdown()
-    cli_naval_btl(grid, boat_list, tours)
+    cli_naval_btl(grid, boat_list, tours, total_tours)
     return("___")
-    
-version = "1.5.1"
-n = 4 #4
-nbr_boat = 4 #4
-tours = total_tours = 10 #10
 
-run_prgm(version, n, nbr_boat, tours)
+# Run the program
+if __name__ == "__main__":
+    print(run_prgm())
 
