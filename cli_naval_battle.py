@@ -1,6 +1,6 @@
 # Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
 # Auteurs : Groupe Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.5.3)
+# File_name = "cli_naval_battle.py" (version 1.5.4)
 
 import random # -> pour générer des nombres aléatoires
 import time # / pour gèrer le temps de l'animation (emoji)
