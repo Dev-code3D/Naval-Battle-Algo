@@ -1,12 +1,12 @@
 # Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
-# Auteurs : Groupe Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.5.4)
+# Auteurs : Groupe Sandy Maurelle - Assem HSSINI
+# File_name = "cli_naval_battle.py" (version 1.5.5)
 
 import random # -> pour générer des nombres aléatoires
 import time # / pour gèrer le temps de l'animation (emoji)
 import sys # / pour gèrer l'affichage-suppr des animation (emoji)
 
-version = "1.5.4"
+version = "1.5.5"
 
 def set_difficulty(n, nbr_boat, tours):
     """Allows the user to set the game difficulty."""
@@ -192,7 +192,7 @@ def cli_naval_btl(grid, boat_list, tours, total_tours): # Programe principal
         end = time.time()
         print(chronogame(start, end))
         print("Thank you for playing ! See you soon :)")
-        print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
+        print("By Grp1 : Sandy Maurelle - Assem HSSINI")
         print(f"v.{version}\n")
 
 
