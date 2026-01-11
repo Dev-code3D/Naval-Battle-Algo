@@ -11,7 +11,7 @@ version = "1.5.4"
 def set_difficulty(n, nbr_boat, tours):
     """Allows the user to set the game difficulty."""
     print("Choose the difficulty level:")
-    print("1-Easy 🙃 \n2-Medium 🛳️ \n3-Hard ☠️☠")
+    print("1-Easy 🙃 \n2-Medium 🛳️ \n3-Hard ☠️")
     while True:
         try:
             choice = int(input("Enter your choice (1/2/3): "))
