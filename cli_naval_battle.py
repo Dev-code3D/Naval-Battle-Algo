@@ -1,12 +1,12 @@
 # Python | Naval Battle CLI Version - ISFATES Algorithmique L1 Sem1
 # Auteurs : Groupe Sandy Maurelle - Assem HSSINI
-# File_name = "cli_naval_battle.py" (version 1.5.5)
+# File_name = "cli_naval_battle.py" (version 1.6.0)
 
 import random # -> pour générer des nombres aléatoires
-import time # / pour gèrer le temps de l'animation (emoji)
-import sys # / pour gèrer l'affichage-suppr des animation (emoji)
+import time # / pour gérer le temps de l'animation (emoji)
+import sys # / pour gérer l'affichage-suppr des animation (emoji)
 
-version = "1.5.5"
+version = "1.6.0"
 
 def set_difficulty(n, nbr_boat, tours):
     """Allows the user to set the game difficulty."""
@@ -65,19 +65,20 @@ def plate(n):
     return [[0 for i in range(n)] for i in range(n)]
 
 
-def show_board(grid):
-    """Affiche le plateau comme un échiquier (style des échects) : lettres en colonnes et chiffres en lignes"""
+def show_board_rec(grid, i=0):
+    """Affiche la grille recursivement (ligne par ligne) comme un échiquier (style des échects) : lettres en colonnes et chiffres en lignes"""
     size = len(grid)
-    letters = [chr(ord('A') + i) for i in range(size)]
-    
-    # Affichage de l'entête avec lettres (colonnes)
-    print("    " + "   ".join(letters))
-    print("  +" + "---+" * size)
-    
-    # Affichage des lignes avec chiffres à gauche
-    for i, row in enumerate(grid):
-        print(f"{i+1} | " + " | ".join(str(cell) for cell in row) + " |")
+    if i == 0:
+        letters = [chr(ord('A') + i) for i in range(size)]
+        # Affichage de l'entête avec lettres (colonnes)
+        print("    " + "   ".join(letters))
         print("  +" + "---+" * size)
+    if i == size:
+        return # condition d'arret
+    # Affichage des lignes avec chiffres à gauche
+    print(f"{i+1} | " + " | ".join(str(cell) for cell in grid[i]) + " |")
+    print("  +" + "---+" * size)
+    show_board_rec(grid, i+1) # appel recursif
 
 
 def gen_boat(t, grid):
@@ -118,6 +119,25 @@ def parse_coord(coord, size):  # Gestion de l'entrée des coordonnées par l'uti
         return None
 
 
+def ask_coord_rec(size):
+    """
+    Demande une coordonnée valide à l'utilisateur de manière recursive.
+    """
+    coord = input("Coordinate : ")
+
+    if coord == "STOPall":
+        sys.exit()
+
+    parsed = parse_coord(coord, size)
+
+    if parsed is None:
+        print("Invalid format! Example: A1, C3...")
+        time.sleep(0.5)
+        return ask_coord_rec(size) # appel recursif
+
+    return parsed # condition d'arret
+
+
 def progress_bar(total_tours, tours):
     """Affiche une barre de progression vis-a-vis de a la progression du jeux fait par le joueur par rapport au nombre de tours max possibles"""
     # longueur de la barre vaut le max de "tours" soit la valeur par défaut
@@ -134,7 +154,7 @@ def chronogame(start, end):
 
 def cli_naval_btl(grid, boat_list, tours, total_tours): # Programe principal
     """Boucle / programme principal du jeu"""
-    print("By Grp1 : Sandy Maurelle - (xThéo BELTZUNGx) - Assem HSSINI")
+    print("By Grp1 : Sandy Maurelle - Assem HSSINI")
     print(f"v.{version}\n")
 
     start=time.time()
@@ -145,20 +165,12 @@ def cli_naval_btl(grid, boat_list, tours, total_tours): # Programe principal
     print("\nEnter coordinates (eq A1, b2)... [stop with: STOPall]\n")
 
     while tours > 0:
-        show_board(grid) # Affiche la grille
+        show_board_rec(grid) # Affiche la grille
         print(f"Boats : {len(boat_list)}/{cnt_boat}")
 
         progress_bar(total_tours,tours) # barre de progression + tours restants
 
-        coord = input("Coordinate : ")
-        parsed = parse_coord(coord, size)
-        if coord == "STOPall": print("\nSee you soon!\n") ; sys.exit()
-        if parsed is None:
-            print("Invalid format! Example: A1, C3...\n")
-            time.sleep(2.4)
-            continue
-
-        row, col = parsed
+        row, col = ask_coord_rec(size)
 
         if grid[row][col] in [icon_boat, icon_missed]:
             print("You already tried this cell !")
